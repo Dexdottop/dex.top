@@ -75,14 +75,20 @@ contract Future{
   // expire by admin or market after expireDate
   // shorter/longer can force expiring the future 3 days after expiration
   function expire() public {
-    if(now < data.expireDate) throw;
-     if(now >= data.expireDate && now < data.expireDate + 3 days) {
-       if(msg.sender!=0xfE02a56127aFfBba940bB116Fa30A3Af10d12f80 && msg.sender!=data.market) throw;
+    if (now < data.expireDate) throw;
+     if (now >= data.expireDate && now < data.expireDate + 3 days) {
+       if (msg.sender!=0xfE02a56127aFfBba940bB116Fa30A3Af10d12f80 && msg.sender!=data.market) throw;
        LibFuture.expire(data);
      } else {
-       if(msg.sender!=data.S && msg.sender!=data.L) throw;
+       if (msg.sender!=data.S && msg.sender!=data.L) throw;
        LibFuture.abnormalExpire(data);
     }
+  }
+
+  // only in alpha test; expire early by admin
+  function forceExpire() public {
+    if (msg.sender!='0xfE02a56127aFfBba940bB116Fa30A3Af10d12f80') throw;
+    LibFuture.expire(data);
   }
 
   // throw unexpected txs
